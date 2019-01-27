@@ -3,8 +3,9 @@
 #include <cassert>
 #include <functional>
 #include <vector>
+#include <set>
+#include <unordered_set>
 
-using namespace std;
 
 int foo() {
 	return 1;
@@ -15,11 +16,8 @@ int bar() {
 }
 
 double pi() {
+	// kak grubo
 	return 3.14;
-}
-
-double qqe(double a) {
-	return a;
 }
 
 void test_defaultConstructor() {
@@ -35,11 +33,6 @@ void test_copyConstructor() {
 
 void test_nullptrConstructor() {
 	exam::function<void(void)> f(nullptr);
-}
-
-void test_nullptrFunction() {
-	exam::function<void(void)> f(nullptr);
-	exam::function<void(void)> p(f);
 }
 
 void test_moveConstructor() {
@@ -68,14 +61,6 @@ void test_explicitOperatorBool() {
 	assert(f);
 }
 
-void test_lambda() {
-	int a = 10;
-	exam::function<int(int)> l = [a](int x) {
-		return a + x;
-	};
-	assert(l(5) == 15);
-}
-
 void test_swap() {
 	exam::function<int()> f(foo);
 	exam::function<int()> b(bar);
@@ -88,13 +73,6 @@ void test_swap() {
 	assert(b() == 1);
 }
 
-void test_diffTypes() {
-	exam::function<int()> f = foo;
-	assert(f() == 1);
-	f = pi;
-	assert(pi() == 3.14);
-}
-
 void test_copy() {
 	std::vector<int> buffer(100, -1);
 	exam::function<int()> g;
@@ -102,7 +80,6 @@ void test_copy() {
 		exam::function<int()> f = [buffer]() {
 			return buffer[99];
 		};
-		exam::function<int()> t(f);
 		g = f;
 		exam::function<int()> h(f);
 		assert(f() == -1);
@@ -129,6 +106,7 @@ void test_copy_small_object() {
 }
 
 void NIKITOZZZZ_test() {
+	// тут хз, мб плохой тест (для решение нужна убрать const после invoke/call/etc)
 	int foo = 1;
 	double bar = 3;
 	double bar2 = 3;
@@ -147,37 +125,19 @@ void NIKITOZZZZ_test() {
 	f(std::cout);
 }
 
-size_t res;
-
-struct Func {
-	size_t operator() () {
-		res = 70;
-		return res;
-	}
-};
-
-void test70() {
-	Func F12;
-	exam::function<size_t()> f12(F12);
-	assert(f12() == 70);
-}
 
 void all_test() {
 	test_defaultConstructor();
 	test_copyConstructor();
 	test_nullptrConstructor();
-	test_nullptrFunction();
 	test_moveConstructor();
 	test_operatorAssignment();
 	test_moveAssignment();
 	test_explicitOperatorBool();
 	test_swap();
-	test_lambda();
-	test_diffTypes();
-	test_copy();
 	test_copy_small_object();
+	test_copy();
 	NIKITOZZZZ_test();
-	test70();
 	std::cout << "OK!";
 }
 

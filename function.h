@@ -7,6 +7,7 @@
 #include <iostream>
 #include <memory>
 #include <type_traits>
+#include <functional>
 
 namespace exam {
 	using std::forward;
@@ -15,7 +16,7 @@ namespace exam {
 	using std::make_unique;
 
 	constexpr size_t MAX_SIZE = 64;
-	constexpr size_t MAX_ALIGN = 64;
+	constexpr size_t MAX_ALIGN = sizeof(int);
 
 	template <typename T>
 	class function;
